@@ -20,10 +20,8 @@ import android.content.ClipData
 import android.content.ClipDescription
 import android.os.Build
 import android.view.View
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.draganddrop.dragAndDropSource
 import androidx.compose.foundation.draganddrop.dragAndDropTarget
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -39,34 +37,27 @@ import com.alexvanyo.composelife.model.RunLengthEncodedCellStateSerializer
 import com.alexvanyo.composelife.model.di.CellStateParserProvider
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalFoundationApi::class)
 actual fun Modifier.cellStateDragAndDropSource(
     getCellState: () -> CellState,
 ): Modifier =
-    dragAndDropSource {
-        detectTapGestures(
-            onLongPress = {
-                startTransfer(
-                    DragAndDropTransferData(
-                        clipData = ClipData.newPlainText(
-                            "cellState",
-                            RunLengthEncodedCellStateSerializer.serializeToString(getCellState())
-                                .joinToString("\n"),
-                        ),
-                        flags =
-                        if (Build.VERSION.SDK_INT >= 24) {
-                            View.DRAG_FLAG_GLOBAL
-                        } else {
-                            0
-                        },
-                    ),
-                )
-            },
-        )
-    }
+    dragAndDropSource(
+        transferData = {
+            DragAndDropTransferData(
+                clipData = ClipData.newPlainText(
+                    "cellState",
+                    RunLengthEncodedCellStateSerializer.serializeToString(getCellState())
+                        .joinToString("\n"),
+                ),
+                flags = if (Build.VERSION.SDK_INT >= 24) {
+                    View.DRAG_FLAG_GLOBAL
+                } else {
+                    0
+                },
+            )
+        },
+    )
 
 context(CellStateParserProvider)
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 @Suppress("ComposeComposableModifier")
 actual fun Modifier.cellStateDragAndDropTarget(
