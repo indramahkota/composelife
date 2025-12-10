@@ -81,7 +81,7 @@ eval("{__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpa
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
-module.exports = __webpack_require__.p + "6faa494b4d6591d7eaaa.wasm";
+module.exports = __webpack_require__.p + "4f5dc6e4359d98c7fcc0.wasm";
 
 /***/ }),
 
